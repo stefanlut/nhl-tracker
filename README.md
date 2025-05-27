@@ -1,4 +1,24 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NHL Live Games Tracker
+
+A modern Next.js application that displays live NHL game scores and updates. Built with Next.js, TypeScript, and Tailwind CSS, this application provides real-time game information using the NHL's public API.
+
+## Features
+
+- Live game tracking with real-time score updates
+- Team logos for all NHL teams
+- Game status indicators (Live, Final, or upcoming game times)
+- Dark mode support
+- Responsive design for all screen sizes
+- Automatic data refresh every 5 minutes
+
+## Technical Details
+
+- Built with Next.js 14+ and TypeScript
+- Uses the NHL public API (api-web.nhle.com)
+- Styled with Tailwind CSS
+- SVG logo integration from NHL's CDN
+- Optimized image loading with next/image
+- Server-side rendering for better performance
 
 ## Getting Started
 
@@ -16,21 +36,44 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### GameCard Component
+The main component that displays individual game information including:
+- Team logos and names
+- Current score
+- Game status (Live/Final/Scheduled)
+- Venue information
+- Visual indicators for live games
 
-## Learn More
+### Main Page
+- Responsive layout with centered content
+- Automatic data fetching and revalidation
+- Error handling for API failures
+- Loading states and empty states
 
-To learn more about Next.js, take a look at the following resources:
+## API Integration
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The application integrates with the NHL API:
+```typescript
+GET https://api-web.nhle.com/v1/schedule/now
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Data is refreshed every 5 minutes to ensure up-to-date game information while maintaining reasonable API usage.
 
-## Deploy on Vercel
+## Styling
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Custom dark mode implementation
+- Responsive design using Tailwind CSS
+- Animated indicators for live games
+- Optimized team logo display
+- Consistent spacing and typography
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Future Improvements
+
+Potential enhancements could include:
+- Detailed game statistics
+- Player information
+- Historical game data
+- Live play-by-play updates
+- Team standings
+- Push notifications for game updates
