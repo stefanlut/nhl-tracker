@@ -51,7 +51,7 @@ export default async function WeeklySchedule() {
             href="/"
             className="text-blue-600 dark:text-blue-400 hover:underline"
           >
-            View Today's Games
+            View Today&apos;s Games
           </Link>
         </div>
         

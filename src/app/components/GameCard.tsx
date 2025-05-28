@@ -59,8 +59,6 @@ export default function GameCard({ game }: GameCardProps) {
         } = game.seriesStatus;
 
         // Determine which team is home and which is away for this game
-        const currentTeamAbbrev = getTeamAbbr(game.homeTeam.id);
-        const isTopSeedHome = currentTeamAbbrev === topSeedTeamAbbrev;
         
         // Get the series leader text
         const seriesLeader = () => {
