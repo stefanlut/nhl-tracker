@@ -3,7 +3,7 @@ import Link from "next/link";
 import GameCard from "../components/GameCard";
 import { REFRESH_INTERVAL_SECONDS } from "@/constants";
 
-function getWeekDates() {
+export function getWeekDates() {
   const now = new Date();
   const currentDay = now.getDay();
   const monday = new Date(now);
