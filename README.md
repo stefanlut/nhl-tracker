@@ -7,6 +7,10 @@ A modern Next.js application that displays live NHL game scores and updates. Bui
 - Live game tracking with real-time score updates
 - Team logos for all NHL teams
 - Game status indicators (Live, Final, or upcoming game times)
+- Playoff series information display
+- Weekly schedule view with date-based navigation
+- Accurate game times with proper timezone handling
+- Period and clock information for live games
 - Dark mode support
 - Responsive design for all screen sizes
 - Automatic data refresh every 5 minutes
@@ -19,6 +23,7 @@ A modern Next.js application that displays live NHL game scores and updates. Bui
 - SVG logo integration from NHL's CDN
 - Optimized image loading with next/image
 - Server-side rendering for better performance
+- Proper timezone handling for game times
 
 ## Getting Started
 
@@ -36,44 +41,26 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Components
 
 ### GameCard Component
 The main component that displays individual game information including:
 - Team logos and names
 - Current score
 - Game status (Live/Final/Scheduled)
+- Period and clock information for live games
+- Playoff series details (round, series status, wins needed)
 - Venue information
 - Visual indicators for live games
+
+### Weekly Schedule
+- Date-based navigation for viewing games across different days
+- Organized display of games by date
+- Centered layout for better readability
+- Consistent styling with the main view
 
 ### Main Page
 - Responsive layout with centered content
 - Automatic data fetching and revalidation
 - Error handling for API failures
-- Loading states and empty states
-
-## API Integration
-
-The application integrates with the NHL API:
-```typescript
-GET https://api-web.nhle.com/v1/schedule/now
-```
-
-Data is refreshed every 5 minutes to ensure up-to-date game information while maintaining reasonable API usage. Information about NHL APIs can be found [here](https://github.com/Zmalski/NHL-API-Reference?tab=readme-ov-file#nhl-web-api-documentation).
-
-## Styling
-
-- Custom dark mode implementation
-- Responsive design using Tailwind CSS
-- Animated indicators for live games
-- Optimized team logo display
-- Consistent spacing and typography
-
-## Future Improvements
-
-Potential enhancements could include:
-- Detailed game statistics
-- Player information
-- Historical game data
-- Live play-by-play updates
-- Team standings
-- Push notifications for game updates
+- Quick navigation to weekly schedule view

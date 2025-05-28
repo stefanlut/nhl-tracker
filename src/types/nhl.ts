@@ -31,6 +31,18 @@ export interface NHLGame {
         timeRemaining: string;
         running: boolean;
     };
+    seriesStatus?: {
+        round: number;
+        seriesAbbrev: string;
+        seriesTitle: string;
+        seriesLetter: string;
+        neededToWin: number;
+        topSeedTeamAbbrev: string;
+        topSeedWins: number;
+        bottomSeedTeamAbbrev: string;
+        bottomSeedWins: number;
+        gameNumberOfSeries: number;
+    };
 }
 
 export interface NHLScheduleResponse {

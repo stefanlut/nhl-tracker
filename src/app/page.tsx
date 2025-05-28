@@ -3,6 +3,7 @@ import RefreshTimer from "./components/RefreshTimer";
 import { NHLScheduleResponse } from "@/types/nhl";
 import { REFRESH_INTERVAL_SECONDS } from "@/constants";
 import { Suspense } from "react";
+import Link from "next/link";
 
 async function getNHLGames() {
   const res = await fetch("https://api-web.nhle.com/v1/schedule/now", {
@@ -35,6 +36,12 @@ export default async function Home() {
           <h1 className="text-4xl font-bold text-center text-gray-800 dark:text-gray-100">
             NHL Games Today
           </h1>
+          <Link 
+            href="/weekly"
+            className="text-blue-600 dark:text-blue-400 hover:underline"
+          >
+            View Full Week Schedule
+          </Link>
           <Suspense fallback={null}>
             <RefreshTimer />
           </Suspense>

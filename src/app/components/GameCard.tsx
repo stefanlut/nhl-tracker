@@ -16,7 +16,7 @@ export default function GameCard({ game }: GameCardProps) {
     const isLive = game.gameState === 'LIVE' || game.gameState === 'CRIT' || game.gameState === 'PROG';
     const isFinal = game.gameState === 'FINAL' || game.gameState === 'OFF';
     const isPregame = game.gameState === 'PRE' || game.gameState === 'FUT';
-
+    
     // Get game status text
     const getGameStatus = () => {
         if (isLive) {
@@ -25,42 +25,62 @@ export default function GameCard({ game }: GameCardProps) {
             
             let statusText = 'LIVE';
             
-            const periodText = period?.periodType === 'REG'
-                ? `P${period.number}`
-                : period?.periodType === 'OT'
-                    ? 'OT'
-                    : period?.periodType === 'SO'
-                        ? 'SO'
-                        : '';
-            
-            const clockText = clock?.timeRemaining || '';
-            
-            // Add period and clock info if available
-            if (periodText) {
-                statusText += ` · ${periodText}`;
+            if (period) {
+                const periodText = period.periodType === 'REG' 
+                    ? `P${period.number}` 
+                    : period.periodType === 'OT' 
+                        ? 'OT' 
+                        : 'SO';
+                statusText = `${statusText} · ${periodText}`;
+                
+                if (clock?.timeRemaining && clock.timeRemaining !== 'undefined') {
+                    statusText = `${statusText} · ${clock.timeRemaining}`;
+                }
             }
-            
-            if (clockText && clockText !== 'undefined') {
-                statusText += ` · ${clockText}`;
-            }
-            
             return statusText;
         }
         if (isFinal) return 'Final';
         if (isPregame) return gameTime;
-        return gameTime; // default to game time for unknown states
+        return gameTime;
     };
 
-    // Get game clock text
-    const getGameClock = () => {
-        if (isLive && game.clock?.timeRemaining) {
-            return game.clock.timeRemaining;
-        }
-        return null;
+    // Get playoff series status text
+    const getSeriesStatusText = () => {
+        if (!game.seriesStatus) return null;
+
+        const { 
+            seriesTitle, 
+            topSeedTeamAbbrev, 
+            bottomSeedTeamAbbrev,
+            topSeedWins, 
+            bottomSeedWins,
+            gameNumberOfSeries,
+            neededToWin
+        } = game.seriesStatus;
+
+        // Determine which team is home and which is away for this game
+        const currentTeamAbbrev = getTeamAbbr(game.homeTeam.id);
+        const isTopSeedHome = currentTeamAbbrev === topSeedTeamAbbrev;
+        
+        // Get the series leader text
+        const seriesLeader = () => {
+            if (topSeedWins === bottomSeedWins) return "Series tied";
+            const leadingTeam = topSeedWins > bottomSeedWins ? topSeedTeamAbbrev : bottomSeedTeamAbbrev;
+            const leadingWins = Math.max(topSeedWins, bottomSeedWins);
+            if (leadingWins === neededToWin) return `${leadingTeam} wins series`;
+            return `${leadingTeam} leads`;
+        };
+
+        return {
+            title: seriesTitle,
+            gameNumber: gameNumberOfSeries,
+            seriesScore: `${topSeedWins}-${bottomSeedWins}`,
+            status: seriesLeader()
+        };
     };
 
-    // Function to get the logo URL based on team ID
-    const getTeamLogoUrl = (teamId: number) => {
+    // Function to get team abbreviation from ID
+    const getTeamAbbr = (teamId: number): string => {
         const teamAbbrMap: { [key: number]: string } = {
             1: 'NJD', 2: 'NYI', 3: 'NYR', 4: 'PHI', 5: 'PIT',
             6: 'BOS', 7: 'BUF', 8: 'MTL', 9: 'OTT', 10: 'TOR',
@@ -70,13 +90,20 @@ export default function GameCard({ game }: GameCardProps) {
             28: 'SJS', 29: 'CBJ', 30: 'MIN', 52: 'WPG', 53: 'ARI',
             54: 'VGK', 55: 'SEA'
         };
-        const teamAbbr = teamAbbrMap[teamId] || '';
+        return teamAbbrMap[teamId] || '';
+    };
+
+    // Get logo URL using the same abbreviation logic
+    const getTeamLogoUrl = (teamId: number) => {
+        const teamAbbr = getTeamAbbr(teamId);
         return `https://assets.nhle.com/logos/nhl/svg/${teamAbbr}_dark.svg?v=2`;
     };
     
     const awayTeamName = game.awayTeam?.placeName?.default || 'Away Team';
     const homeTeamName = game.homeTeam?.placeName?.default || 'Home Team';
     const venueName = game.venue?.default || 'TBD';
+
+    const seriesStatus = getSeriesStatusText();
 
     return (
         <div className="w-full max-w-2xl p-6 mb-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-shadow duration-200">
@@ -90,7 +117,6 @@ export default function GameCard({ game }: GameCardProps) {
                         }`}>
                             {getGameStatus()}
                         </span>
-
                         {isLive && (
                             <span className="relative flex h-2.5 w-2.5">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
@@ -98,6 +124,13 @@ export default function GameCard({ game }: GameCardProps) {
                             </span>
                         )}
                     </div>
+                    {seriesStatus && (
+                        <div className="flex items-center">
+                            <span className="text-xs font-medium text-gray-500 dark:text-gray-400 px-2 border-l border-gray-300 dark:border-gray-600">
+                                {seriesStatus.title} · Game {seriesStatus.gameNumber} · {seriesStatus.status} {seriesStatus.seriesScore}
+                            </span>
+                        </div>
+                    )}
                 </div>
                 <span className="text-sm text-gray-500 dark:text-gray-400">
                     {venueName}
