@@ -58,7 +58,7 @@ The application integrates with the NHL API:
 GET https://api-web.nhle.com/v1/schedule/now
 ```
 
-Data is refreshed every 5 minutes to ensure up-to-date game information while maintaining reasonable API usage.
+Data is refreshed every 5 minutes to ensure up-to-date game information while maintaining reasonable API usage. Information about NHL APIs can be found [here](https://github.com/Zmalski/NHL-API-Reference?tab=readme-ov-file#nhl-web-api-documentation).
 
 ## Styling
 
