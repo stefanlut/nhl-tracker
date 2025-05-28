@@ -6,10 +6,10 @@ interface GameCardProps {
 }
 
 export default function GameCard({ game }: GameCardProps) {
-    const gameTime = new Date(game.startTimeUTC).toLocaleTimeString([], { 
+    const gameTime = new Date(game.startTimeUTC).toLocaleTimeString('en-US', { 
         hour: 'numeric', 
         minute: '2-digit',
-        hour12: true 
+        hour12: true
     }).toLowerCase();
     
     // Enhanced game state handling
@@ -40,8 +40,16 @@ export default function GameCard({ game }: GameCardProps) {
             return statusText;
         }
         if (isFinal) return 'Final';
-        if (isPregame) return gameTime;
-        return gameTime;
+        if (isPregame) return (
+            <span title="Time shown in your local timezone">
+                {gameTime}
+            </span>
+        );
+        return (
+            <span title="Time shown in your local timezone">
+                {gameTime}
+            </span>
+        );
     };
 
     // Get playoff series status text
