@@ -9,8 +9,11 @@ export default function GameCard({ game }: GameCardProps) {
     const gameTime = new Date(game.startTimeUTC).toLocaleTimeString('en-US', { 
         hour: 'numeric', 
         minute: '2-digit',
-        hour12: true
+        hour12: true,
+        timeZone: 'America/New_York'
     }).toLowerCase();
+
+    const gameTimeWithZone = `${gameTime} ET`;
     
     // Enhanced game state handling
     const isLive = game.gameState === 'LIVE' || game.gameState === 'CRIT' || game.gameState === 'PROG';
@@ -40,16 +43,8 @@ export default function GameCard({ game }: GameCardProps) {
             return statusText;
         }
         if (isFinal) return 'Final';
-        if (isPregame) return (
-            <span title="Time shown in your local timezone">
-                {gameTime}
-            </span>
-        );
-        return (
-            <span title="Time shown in your local timezone">
-                {gameTime}
-            </span>
-        );
+        if (isPregame) return gameTimeWithZone;
+        return gameTimeWithZone;
     };
 
     // Get playoff series status text
