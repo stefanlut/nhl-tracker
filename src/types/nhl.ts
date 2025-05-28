@@ -23,6 +23,14 @@ export interface NHLGame {
     };
     gameState: string;
     gameScheduleState: string;
+    periodDescriptor?: {
+        number: number;
+        periodType: 'REG' | 'OT' | 'SO';
+    };
+    clock?: {
+        timeRemaining: string;
+        running: boolean;
+    };
 }
 
 export interface NHLScheduleResponse {

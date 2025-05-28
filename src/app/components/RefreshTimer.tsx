@@ -9,6 +9,8 @@ export default function RefreshTimer() {
         const timer = setInterval(() => {
             setSecondsLeft((prev) => {
                 if (prev <= 1) {
+                    // Reload the page when timer reaches zero
+                    window.location.reload();
                     return REFRESH_INTERVAL_SECONDS;
                 }
                 return prev - 1;

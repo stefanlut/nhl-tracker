@@ -6,24 +6,61 @@ interface GameCardProps {
 }
 
 export default function GameCard({ game }: GameCardProps) {
-    const gameTime = new Date(game.startTimeUTC).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    const gameTime = new Date(game.startTimeUTC).toLocaleTimeString([], { 
+        hour: 'numeric', 
+        minute: '2-digit',
+        hour12: true 
+    }).toLowerCase();
     
     // Enhanced game state handling
     const isLive = game.gameState === 'LIVE' || game.gameState === 'CRIT' || game.gameState === 'PROG';
     const isFinal = game.gameState === 'FINAL' || game.gameState === 'OFF';
     const isPregame = game.gameState === 'PRE' || game.gameState === 'FUT';
-    
+
     // Get game status text
     const getGameStatus = () => {
-        if (isLive) return 'LIVE';
+        if (isLive) {
+            const period = game.periodDescriptor;
+            const clock = game.clock;
+            
+            let statusText = 'LIVE';
+            
+            const periodText = period?.periodType === 'REG'
+                ? `P${period.number}`
+                : period?.periodType === 'OT'
+                    ? 'OT'
+                    : period?.periodType === 'SO'
+                        ? 'SO'
+                        : '';
+            
+            const clockText = clock?.timeRemaining || '';
+            
+            // Add period and clock info if available
+            if (periodText) {
+                statusText += ` · ${periodText}`;
+            }
+            
+            if (clockText && clockText !== 'undefined') {
+                statusText += ` · ${clockText}`;
+            }
+            
+            return statusText;
+        }
         if (isFinal) return 'Final';
         if (isPregame) return gameTime;
         return gameTime; // default to game time for unknown states
     };
 
+    // Get game clock text
+    const getGameClock = () => {
+        if (isLive && game.clock?.timeRemaining) {
+            return game.clock.timeRemaining;
+        }
+        return null;
+    };
+
     // Function to get the logo URL based on team ID
     const getTeamLogoUrl = (teamId: number) => {
-        // Using the NHL API's image CDN with team abbreviation
         const teamAbbrMap: { [key: number]: string } = {
             1: 'NJD', 2: 'NYI', 3: 'NYR', 4: 'PHI', 5: 'PIT',
             6: 'BOS', 7: 'BUF', 8: 'MTL', 9: 'OTT', 10: 'TOR',
@@ -43,21 +80,24 @@ export default function GameCard({ game }: GameCardProps) {
 
     return (
         <div className="w-full max-w-2xl p-6 mb-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-shadow duration-200">
-            <div className="flex justify-between items-center mb-4">
-                <div className="flex items-center gap-2">
-                    <span className={`text-sm px-2 py-1 rounded-full font-medium ${
-                        isLive ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100' :
-                        isFinal ? 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-100' :
-                        'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100'
-                    }`}>
-                        {getGameStatus()}
-                    </span>
-                    {isLive && (
-                        <span className="relative flex h-3 w-3">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+            <div className="flex flex-wrap justify-between items-center mb-4">
+                <div className="flex items-center gap-3 mb-2 sm:mb-0">
+                    <div className="flex items-center gap-2">
+                        <span className={`text-sm md:text-base px-3 py-1.5 rounded-full font-medium whitespace-nowrap ${
+                            isLive ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100' :
+                            isFinal ? 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-100' :
+                            'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100'
+                        }`}>
+                            {getGameStatus()}
                         </span>
-                    )}
+
+                        {isLive && (
+                            <span className="relative flex h-2.5 w-2.5">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                            </span>
+                        )}
+                    </div>
                 </div>
                 <span className="text-sm text-gray-500 dark:text-gray-400">
                     {venueName}
