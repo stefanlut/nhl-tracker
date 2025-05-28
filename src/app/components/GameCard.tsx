@@ -71,10 +71,15 @@ export default function GameCard({ game }: GameCardProps) {
             return `${leadingTeam} leads`;
         };
 
+        // Always show the higher number first in the series score
+        const seriesScore = topSeedWins > bottomSeedWins
+            ? `${topSeedWins}-${bottomSeedWins}`
+            : `${bottomSeedWins}-${topSeedWins}`;
+
         return {
             title: seriesTitle,
             gameNumber: gameNumberOfSeries,
-            seriesScore: `${topSeedWins}-${bottomSeedWins}`,
+            seriesScore,
             status: seriesLeader()
         };
     };
