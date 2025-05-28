@@ -20,14 +20,14 @@ async function getNHLGames() {
   }
   
   const data = await res.json();
-  console.log('NHL API Response:', JSON.stringify(data, null, 2));
+  //console.log('NHL API Response:', JSON.stringify(data, null, 2));
   return data as NHLScheduleResponse;
 }
 
 export default async function Home() {
   const schedule = await getNHLGames();
   const todaysGames = schedule.gameWeek[0]?.games || [];
-  console.log('Today\'s games:', JSON.stringify(todaysGames, null, 2));
+  //console.log('Today\'s games:', JSON.stringify(todaysGames, null, 2));
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
