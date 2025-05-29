@@ -32,6 +32,7 @@ const mockGame: NHLGame = {
       default: 'New Jersey',
     },
     score: 2,
+    sog: 25,
   },
   homeTeam: {
     id: 2, // NYI
@@ -39,6 +40,7 @@ const mockGame: NHLGame = {
       default: 'New York',
     },
     score: 3,
+    sog: 28,
   },
   gameState: 'LIVE',
   gameScheduleState: 'OK',
@@ -67,8 +69,8 @@ describe('GameCard', () => {
     // Test venue is displayed
     expect(screen.getByText('Test Arena')).toBeInTheDocument();
     
-    // Test game status
-    expect(screen.getByText('LIVE · P2 · 10:00')).toBeInTheDocument();
+    // Test game status with shots on goal
+    expect(screen.getByText('LIVE · P2 · 10:00 · SOG: NJD 25, NYI 28')).toBeInTheDocument();
   });
 
   it('renders a final game correctly', () => {
@@ -79,7 +81,7 @@ describe('GameCard', () => {
     };
     
     render(<GameCard game={finalGame} />);
-    expect(screen.getByText('Final')).toBeInTheDocument();
+    expect(screen.getByText('Final · SOG: NJD 25, NYI 28')).toBeInTheDocument();
   });
 
   it('renders playoff series information when available', () => {

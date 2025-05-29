@@ -19,9 +19,8 @@ async function getNHLGames() {
     throw new Error("Failed to fetch NHL games");
   }
   
-  const data = await res.json();
-  //console.log('NHL API Response:', JSON.stringify(data, null, 2));
-  return data as NHLScheduleResponse;
+  const data = await res.json() as NHLScheduleResponse;
+  return data;
 }
 
 export default async function Home() {

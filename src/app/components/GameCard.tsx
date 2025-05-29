@@ -40,9 +40,26 @@ export default function GameCard({ game }: GameCardProps) {
                     statusText = `${statusText} · ${clock.timeRemaining}`;
                 }
             }
+
+            // Add shots on goal for live games with team context
+            if (game.awayTeam.sog !== undefined && game.homeTeam.sog !== undefined) {
+                const awayAbbr = getTeamAbbr(game.awayTeam.id);
+                const homeAbbr = getTeamAbbr(game.homeTeam.id);
+                statusText = `${statusText} · SOG: ${awayAbbr} ${game.awayTeam.sog}, ${homeAbbr} ${game.homeTeam.sog}`;
+            }
+
             return statusText;
         }
-        if (isFinal) return 'Final';
+        if (isFinal) {
+            let statusText = 'Final';
+            // Add shots on goal for completed games with team context
+            if (game.awayTeam.sog !== undefined && game.homeTeam.sog !== undefined) {
+                const awayAbbr = getTeamAbbr(game.awayTeam.id);
+                const homeAbbr = getTeamAbbr(game.homeTeam.id);
+                statusText = `${statusText} · SOG: ${awayAbbr} ${game.awayTeam.sog}, ${homeAbbr} ${game.homeTeam.sog}`;
+            }
+            return statusText;
+        }
         if (isPregame) return gameTimeWithZone;
         return gameTimeWithZone;
     };

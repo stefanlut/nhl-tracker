@@ -13,6 +13,7 @@ export interface NHLGame {
             default: string;
         };
         score: number;
+        sog?: number;  // Shots on goal
     };
     homeTeam: {
         id: number;
@@ -20,6 +21,7 @@ export interface NHLGame {
             default: string;
         };
         score: number;
+        sog?: number;  // Shots on goal
     };
     gameState: string;
     gameScheduleState: string;
