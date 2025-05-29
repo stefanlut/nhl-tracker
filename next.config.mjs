@@ -9,7 +9,7 @@ const nextConfig = {
         pathname: '/logos/nhl/svg/**',
       },
     ],
-    minimumCacheTTL: 3600,
+    minimumCacheTTL: 60,
   },
 };
 

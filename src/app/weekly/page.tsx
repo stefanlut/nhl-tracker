@@ -9,10 +9,15 @@ async function getWeeklyGames() {
   
   // Use the date-based endpoint to get the full week of games
   const res = await fetch(`https://api-web.nhle.com/v1/schedule/${monday}`, {
-    next: { revalidate: REFRESH_INTERVAL_SECONDS },
+    next: { 
+      revalidate: REFRESH_INTERVAL_SECONDS,
+      tags: ['weekly-schedule']
+    },
     headers: {
       'Accept': 'application/json',
-      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache'
     }
   });
   
