@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import GameCard from "./components/GameCard";
 import RefreshTimer from "./components/RefreshTimer";
 import { NHLScheduleResponse } from "@/types/nhl";

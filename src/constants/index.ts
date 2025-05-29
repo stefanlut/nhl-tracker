@@ -1,1 +1,1 @@
-export const REFRESH_INTERVAL_SECONDS = 60; // 1 minute
+export const REFRESH_INTERVAL_SECONDS = 30; // 30 seconds - more frequent updates for game status

@@ -4,6 +4,8 @@ import GameCard from "../components/GameCard";
 import { REFRESH_INTERVAL_SECONDS } from "@/constants";
 import { getWeekDates } from "@/utils/dates";
 
+export const dynamic = 'force-dynamic';
+
 async function getWeeklyGames() {
   const { monday } = getWeekDates();
   
