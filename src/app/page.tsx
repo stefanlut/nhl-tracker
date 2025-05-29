@@ -1,33 +1,9 @@
-import GameCard from "./components/GameCard";
-import RefreshTimer from "./components/RefreshTimer";
-import { NHLScheduleResponse } from "@/types/nhl";
-import { Suspense } from "react";
+import GamesList from "./components/GamesList";
 import Link from "next/link";
+import { Suspense } from "react";
+import RefreshTimer from "./components/RefreshTimer";
 
-async function getNHLGames() {
-  const res = await fetch("https://api-web.nhle.com/v1/schedule/now", {
-    headers: {
-      'Accept': 'application/json',
-      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-      'Cache-Control': 'no-cache, no-store, must-revalidate',
-      'Pragma': 'no-cache'
-    }
-  });
-  
-  if (!res.ok) {
-    console.error('Failed to fetch:', res.status, res.statusText);
-    throw new Error("Failed to fetch NHL games");
-  }
-  
-  const data = await res.json() as NHLScheduleResponse;
-  return data;
-}
-
-export default async function Home() {
-  const schedule = await getNHLGames();
-  const todaysGames = schedule.gameWeek[0]?.games || [];
-  //console.log('Today\'s games:', JSON.stringify(todaysGames, null, 2));
-
+export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
       <main className="container mx-auto max-w-4xl flex flex-col items-center">
@@ -45,19 +21,7 @@ export default async function Home() {
             <RefreshTimer />
           </Suspense>
         </div>
-        {todaysGames.length === 0 ? (
-          <div className="w-full max-w-2xl bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <p className="text-center text-gray-600 dark:text-gray-400">
-              No games scheduled for today
-            </p>
-          </div>
-        ) : (
-          <div className="w-full space-y-4 flex flex-col items-center">
-            {todaysGames.map((game) => (
-              <GameCard key={game.id} game={game} />
-            ))}
-          </div>
-        )}
+        <GamesList type="daily" />
       </main>
     </div>
   );
