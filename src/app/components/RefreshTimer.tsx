@@ -1,20 +1,16 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { REFRESH_INTERVAL_SECONDS } from '@/constants';
 
 export default function RefreshTimer() {
-    const router = useRouter();
     const [secondsLeft, setSecondsLeft] = useState(REFRESH_INTERVAL_SECONDS);
 
     useEffect(() => {
         const timer = setInterval(() => {
             setSecondsLeft((prev) => {
                 if (prev <= 1) {
-                    // Force revalidation of the current route
-                    router.refresh();
-                    // Also revalidate the data
-                    fetch('/api/revalidate', { method: 'POST' });
+                    // Use a full page refresh for static exports
+                    window.location.reload();
                     return REFRESH_INTERVAL_SECONDS;
                 }
                 return prev - 1;
@@ -22,7 +18,7 @@ export default function RefreshTimer() {
         }, 1000);
 
         return () => clearInterval(timer);
-    }, [router]);
+    }, []);
 
     const minutes = Math.floor(secondsLeft / 60);
     const seconds = secondsLeft % 60;

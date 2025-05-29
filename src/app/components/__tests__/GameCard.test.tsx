@@ -6,8 +6,14 @@ import { NHLGame } from '@/types/nhl';
 jest.mock('next/image', () => ({
   __esModule: true,
   default: (props: { src: string; alt: string; width: number; height: number; className?: string; priority?: boolean }) => {
-    // Need to pass through the alt text to satisfy jsx-a11y rules
-    return <img src={props.src} alt={props.alt} width={props.width} height={props.height} className={props.className} />;
+    return (
+      <div 
+        data-testid="mock-image"
+        style={{ width: props.width, height: props.height }}
+        className={props.className}
+        aria-label={props.alt}
+      />
+    );
   },
 }));
 
