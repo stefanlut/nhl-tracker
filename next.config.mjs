@@ -6,7 +6,7 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'assets.nhle.com',
-        pathname: '/logos/nhl/svg/**',
+        pathname: '/**',
       },
     ],
     minimumCacheTTL: 60,

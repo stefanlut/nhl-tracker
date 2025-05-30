@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Link from "next/link";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -27,6 +28,28 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <nav className="bg-white dark:bg-gray-900 shadow-sm">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between h-16">
+              <div className="flex">
+                <div className="flex-shrink-0 flex items-center">
+                  <span className="text-xl font-bold text-gray-800 dark:text-gray-200">NHL Tracker</span>
+                </div>
+                <div className="ml-6 flex items-center space-x-4">
+                  <Link href="/" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">
+                    Games
+                  </Link>
+                  <Link href="/weekly" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">
+                    Weekly
+                  </Link>
+                  <Link href="/teams" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">
+                    Teams
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nav>
         {children}
       </body>
     </html>
