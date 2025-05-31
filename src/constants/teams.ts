@@ -10,7 +10,6 @@ export interface NHLTeam {
 // Teams sorted alphabetically by full name
 export const NHL_TEAMS: NHLTeam[] = [
   { id: 24, name: 'Ducks', code: 'ANA', location: 'Anaheim', fullName: 'Anaheim Ducks' },
-  { id: 53, name: 'Coyotes', code: 'ARI', location: 'Arizona', fullName: 'Arizona Coyotes' },
   { id: 6, name: 'Bruins', code: 'BOS', location: 'Boston', fullName: 'Boston Bruins' },
   { id: 7, name: 'Sabres', code: 'BUF', location: 'Buffalo', fullName: 'Buffalo Sabres' },
   { id: 20, name: 'Flames', code: 'CGY', location: 'Calgary', fullName: 'Calgary Flames' },
@@ -37,6 +36,7 @@ export const NHL_TEAMS: NHLTeam[] = [
   { id: 19, name: 'Blues', code: 'STL', location: 'St. Louis', fullName: 'St. Louis Blues' },
   { id: 14, name: 'Lightning', code: 'TBL', location: 'Tampa Bay', fullName: 'Tampa Bay Lightning' },
   { id: 10, name: 'Maple Leafs', code: 'TOR', location: 'Toronto', fullName: 'Toronto Maple Leafs' },
+  { id: 53, name: 'Mammoth', code: 'UTA', location: 'Utah', fullName: 'Utah Mammoth' },
   { id: 23, name: 'Canucks', code: 'VAN', location: 'Vancouver', fullName: 'Vancouver Canucks' },
   { id: 54, name: 'Golden Knights', code: 'VGK', location: 'Vegas', fullName: 'Vegas Golden Knights' },
   { id: 15, name: 'Capitals', code: 'WSH', location: 'Washington', fullName: 'Washington Capitals' },

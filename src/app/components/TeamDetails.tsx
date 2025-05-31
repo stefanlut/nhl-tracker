@@ -710,7 +710,7 @@ export default function TeamDetails({ teamCode, view }: TeamDetailsProps) {
                                 {skaterData?.shots || 0}
                               </td>
                               <td className="px-3 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200">
-                                {skaterData?.shootingPctg ? `${skaterData.shootingPctg.toFixed(1)}%` : '0.0%'}
+                                {skaterData?.shootingPctg ? `${(skaterData.shootingPctg * 100).toFixed(1)}%` : '0.0%'}
                               </td>
                             </tr>
                           );
