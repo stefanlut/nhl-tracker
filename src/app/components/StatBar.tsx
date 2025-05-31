@@ -4,9 +4,15 @@ interface StatBarProps {
   value: number;
   maxValue?: number;
   greenScale?: boolean;
+  showAsPercentage?: boolean;
+  customThresholds?: {
+    excellent: number;
+    good: number;
+    poor: number;
+  };
 }
 
-export default function StatBar({ value, maxValue = 100, greenScale = false }: StatBarProps) {
+export default function StatBar({ value, maxValue = 100, greenScale = false, showAsPercentage = false, customThresholds }: StatBarProps) {
   // Calculate percentage - ensure it's between 0 and 100
   const percentage = Math.min(Math.max((value / maxValue) * 100, 0), 100);
   
@@ -15,14 +21,17 @@ export default function StatBar({ value, maxValue = 100, greenScale = false }: S
   let labelColor = '';
   
   if (greenScale) {
+    // Use custom thresholds if provided, otherwise use defaults
+    const thresholds = customThresholds || { excellent: 75, good: 50, poor: 25 };
+    
     // Green scale for values where higher is better (e.g., win percentage)
-    if (percentage >= 75) {
+    if (percentage >= thresholds.excellent) {
       barColor = 'bg-green-500';
       labelColor = 'text-green-500';
-    } else if (percentage >= 50) {
+    } else if (percentage >= thresholds.good) {
       barColor = 'bg-green-400';
       labelColor = 'text-green-400';
-    } else if (percentage >= 25) {
+    } else if (percentage >= thresholds.poor) {
       barColor = 'bg-yellow-400';
       labelColor = 'text-yellow-400';
     } else {
@@ -39,10 +48,10 @@ export default function StatBar({ value, maxValue = 100, greenScale = false }: S
     <div className="w-full">
       <div className="flex justify-between items-center mb-1 text-xs">
         <span className={`font-medium ${labelColor} text-right`}>
-          {greenScale ? `${percentage.toFixed(1)}%` : value}
+          {showAsPercentage ? `${percentage.toFixed(1)}%` : value}
         </span>
         <span className="text-gray-500 dark:text-gray-400">
-          {greenScale ? '100%' : maxValue}
+          {showAsPercentage ? '100%' : maxValue}
         </span>
       </div>
       <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">

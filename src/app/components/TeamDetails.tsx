@@ -495,7 +495,7 @@ export default function TeamDetails({ teamCode, view }: TeamDetailsProps) {
                               Rank: <span className="font-medium text-blue-600 dark:text-blue-400">#{teamStatsData.teamStats.ppPctRank || 'N/A'}</span>
                             </span>
                           </div>
-                          <StatBar value={teamStatsData.teamStats.powerPlayPct * 100} maxValue={100} greenScale={true} />
+                          <StatBar value={teamStatsData.teamStats.powerPlayPct * 100} maxValue={100} greenScale={true} showAsPercentage={true} />
                         </>
                       ) : 'N/A'}
                       
@@ -512,7 +512,7 @@ export default function TeamDetails({ teamCode, view }: TeamDetailsProps) {
                               Rank: <span className="font-medium text-blue-600 dark:text-blue-400">#{teamStatsData.teamStats.pkPctRank || 'N/A'}</span>
                             </span>
                           </div>
-                          <StatBar value={teamStatsData.teamStats.penaltyKillPct * 100} maxValue={100} greenScale={true} />
+                          <StatBar value={teamStatsData.teamStats.penaltyKillPct * 100} maxValue={100} greenScale={true} showAsPercentage={true} />
                         </>
                       ) : 'N/A'}
                     </div>
@@ -580,253 +580,251 @@ export default function TeamDetails({ teamCode, view }: TeamDetailsProps) {
                 </div>
               ) : (
                 <>
-                  {/* Skaters Stats Table */}
-                  <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Skaters</h3>
-                  <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 mb-8">
-                    <thead className="bg-gray-50 dark:bg-gray-800">
-                      <tr>
-                        <th 
-                          scope="col"
-                          onClick={() => handleSort('number')}
-                          className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:text-gray-700 dark:hover:text-gray-300"
-                        >
-                          # {getSortIndicator('number')}
-                        </th>
-                        <th 
-                          scope="col"
-                          onClick={() => handleSort('name')}
-                          className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:text-gray-700 dark:hover:text-gray-300"
-                        >
-                          Player {getSortIndicator('name')}
-                        </th>
-                        <th 
-                          scope="col"
-                          onClick={() => handleSort('position')}
-                          className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:text-gray-700 dark:hover:text-gray-300"
-                        >
-                          Pos {getSortIndicator('position')}
-                        </th>
-                        <th 
-                          scope="col"
-                          onClick={() => handleSort('gamesPlayed')}
-                          className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:text-gray-700 dark:hover:text-gray-300"
-                        >
-                          GP {getSortIndicator('gamesPlayed')}
-                        </th>
-                        <th 
-                          scope="col"
-                          onClick={() => handleSort('goals')}
-                          className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:text-gray-700 dark:hover:text-gray-300"
-                        >
-                          G {getSortIndicator('goals')}
-                        </th>
-                        <th 
-                          scope="col"
-                          onClick={() => handleSort('assists')}
-                          className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:text-gray-700 dark:hover:text-gray-300"
-                        >
-                          A {getSortIndicator('assists')}
-                        </th>
-                        <th 
-                          scope="col"
-                          onClick={() => handleSort('points')}
-                          className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:text-gray-700 dark:hover:text-gray-300"
-                        >
-                          Pts {getSortIndicator('points')}
-                        </th>
-                        <th 
-                          scope="col"
-                          onClick={() => handleSort('plusMinus')}
-                          className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:text-gray-700 dark:hover:text-gray-300"
-                        >
-                          +/- {getSortIndicator('plusMinus')}
-                        </th>
-                        <th 
-                          scope="col"
-                          onClick={() => handleSort('penaltyMinutes')}
-                          className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:text-gray-700 dark:hover:text-gray-300"
-                        >
-                          PIM {getSortIndicator('penaltyMinutes')}
-                        </th>
-                        <th 
-                          scope="col"
-                          onClick={() => handleSort('shots')}
-                          className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:text-gray-700 dark:hover:text-gray-300"
-                        >
-                          SOG {getSortIndicator('shots')}
-                        </th>
-                        <th 
-                          scope="col"
-                          onClick={() => handleSort('shootingPctg')}
-                          className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:text-gray-700 dark:hover:text-gray-300"
-                        >
-                          S% {getSortIndicator('shootingPctg')}
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
-                      {sortedRoster
-                        .filter(player => player.positionCode !== 'G')
-                        .map(player => {
-                          const playerStats = getPlayerStatsById(player.id);
-                          const skaterData = playerStats?.skaterData;
-                          
-                          return (
-                            <tr 
-                              key={player.id} 
-                              className="hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
-                              onClick={() => openPlayerModal(player)}
-                            >
-                              <td className="px-3 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200 font-medium">
-                                {player.sweaterNumber || '-'}
-                              </td>
-                              <td className="px-3 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200">
-                                {player.firstName && player.lastName 
-                                  ? `${player.firstName.default} ${player.lastName.default}`
-                                  : 'N/A'}
-                              </td>
-                              <td className="px-3 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200">
-                                {player.positionCode || '-'}
-                              </td>
-                              <td className="px-3 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200">
-                                {skaterData?.gamesPlayed || 0}
-                              </td>
-                              <td className="px-3 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200">
-                                {skaterData?.goals || 0}
-                              </td>
-                              <td className="px-3 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200">
-                                {skaterData?.assists || 0}
-                              </td>
-                              <td className="px-3 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200">
-                                {skaterData?.points || 0}
-                              </td>
-                              <td className="px-3 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200">
-                                {skaterData?.plusMinus > 0 ? `+${skaterData.plusMinus}` : skaterData?.plusMinus || 0}
-                              </td>
-                              <td className="px-3 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200">
-                                {skaterData?.penaltyMinutes || 0}
-                              </td>
-                              <td className="px-3 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200">
-                                {skaterData?.shots || 0}
-                              </td>
-                              <td className="px-3 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200">
-                                {skaterData?.shootingPctg ? `${(skaterData.shootingPctg * 100).toFixed(1)}%` : '0.0%'}
-                              </td>
-                            </tr>
-                          );
-                      })}
-                    </tbody>
-                  </table>
+                  {/* Skaters Stats Cards */}
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200">Skaters</h3>
+                    <div className="flex gap-2 text-xs">
+                      <button 
+                        onClick={() => handleSort('points')}
+                        className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded hover:bg-blue-200 dark:hover:bg-blue-800"
+                      >
+                        Sort by Points {getSortIndicator('points')}
+                      </button>
+                      <button 
+                        onClick={() => handleSort('goals')}
+                        className="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded hover:bg-green-200 dark:hover:bg-green-800"
+                      >
+                        Sort by Goals {getSortIndicator('goals')}
+                      </button>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+                    {sortedRoster
+                      .filter(player => player.positionCode !== 'G')
+                      .map(player => {
+                        const playerStats = getPlayerStatsById(player.id);
+                        const skaterData = playerStats?.skaterData;
+                        
+                        // Calculate max values for StatBars based on team roster
+                        const allSkaters = sortedRoster
+                          .filter(p => p.positionCode !== 'G')
+                          .map(p => getPlayerStatsById(p.id)?.skaterData)
+                          .filter(Boolean);
+                        
+                        const maxGoals = Math.max(...allSkaters.map(s => s?.goals || 0), 1);
+                        const maxAssists = Math.max(...allSkaters.map(s => s?.assists || 0), 1);
+                        const maxPoints = Math.max(...allSkaters.map(s => s?.points || 0), 1);
+                        const maxShots = Math.max(...allSkaters.map(s => s?.shots || 0), 1);
+                        
+                        return (
+                          <div 
+                            key={player.id} 
+                            className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:shadow-lg transition-shadow cursor-pointer"
+                            onClick={() => openPlayerModal(player)}
+                          >
+                            {/* Player Header */}
+                            <div className="flex justify-between items-start mb-3">
+                              <div>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-lg font-bold text-gray-800 dark:text-gray-200">
+                                    #{player.sweaterNumber || '-'}
+                                  </span>
+                                  <span className="text-xs px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded">
+                                    {player.positionCode || '-'}
+                                  </span>
+                                </div>
+                                <h4 className="text-md font-semibold text-gray-800 dark:text-gray-200 mt-1">
+                                  {player.firstName && player.lastName 
+                                    ? `${player.firstName.default} ${player.lastName.default}`
+                                    : 'N/A'}
+                                </h4>
+                              </div>
+                              <div className="text-right text-xs text-gray-500 dark:text-gray-400">
+                                <div>GP: {skaterData?.gamesPlayed || 0}</div>
+                                <div>PIM: {skaterData?.penaltyMinutes || 0}</div>
+                              </div>
+                            </div>
+
+                            {/* Performance Stats with StatBars */}
+                            <div className="space-y-3">
+                              <div>
+                                <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">Goals</div>
+                                <StatBar 
+                                  value={skaterData?.goals || 0} 
+                                  maxValue={maxGoals} 
+                                  greenScale={true} 
+                                />
+                              </div>
+                              
+                              <div>
+                                <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">Assists</div>
+                                <StatBar 
+                                  value={skaterData?.assists || 0} 
+                                  maxValue={maxAssists} 
+                                  greenScale={true} 
+                                />
+                              </div>
+                              
+                              <div>
+                                <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">Points</div>
+                                <StatBar 
+                                  value={skaterData?.points || 0} 
+                                  maxValue={maxPoints} 
+                                  greenScale={true} 
+                                />
+                              </div>
+                              
+                              <div>
+                                <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">Shots on Goal</div>
+                                <StatBar 
+                                  value={skaterData?.shots || 0} 
+                                  maxValue={maxShots} 
+                                />
+                              </div>
+                              
+                              <div className="flex justify-between items-center text-xs pt-2">
+                                <span className="text-gray-600 dark:text-gray-400">
+                                  S%: 
+                                  <span className={`ml-1 font-medium ${
+                                    (skaterData?.shootingPctg || 0) * 100 >= 15.0 ? 'text-green-600 dark:text-green-400' :
+                                    (skaterData?.shootingPctg || 0) * 100 >= 12.0 ? 'text-green-600 dark:text-green-400' :
+                                    (skaterData?.shootingPctg || 0) * 100 >= 8.0 ? 'text-yellow-600 dark:text-yellow-400' :
+                                    'text-red-600 dark:text-red-400'
+                                  }`}>
+                                    {skaterData?.shootingPctg ? `${(skaterData.shootingPctg * 100).toFixed(1)}%` : '0.0%'}
+                                  </span>
+                                </span>
+                                <span className="text-gray-600 dark:text-gray-400">
+                                  +/-: 
+                                  <span className={`ml-1 font-medium ${
+                                    (skaterData?.plusMinus || 0) > 0 ? 'text-green-600 dark:text-green-400' :
+                                    (skaterData?.plusMinus || 0) < 0 ? 'text-red-600 dark:text-red-400' :
+                                    'text-gray-600 dark:text-gray-400'
+                                  }`}>
+                                    {skaterData?.plusMinus > 0 ? `+${skaterData.plusMinus}` : skaterData?.plusMinus || 0}
+                                  </span>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                    })}
+                  </div>
                   
-                  {/* Goalies Stats Table */}
-                  <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Goalies</h3>
-                  <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                    <thead className="bg-gray-50 dark:bg-gray-800">
-                      <tr>
-                        <th 
-                          scope="col"
-                          onClick={() => handleSort('number')}
-                          className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:text-gray-700 dark:hover:text-gray-300"
-                        >
-                          # {getSortIndicator('number')}
-                        </th>
-                        <th 
-                          scope="col"
-                          onClick={() => handleSort('name')}
-                          className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:text-gray-700 dark:hover:text-gray-300"
-                        >
-                          Goalie {getSortIndicator('name')}
-                        </th>
-                        <th 
-                          scope="col"
-                          onClick={() => handleSort('gamesPlayed')}
-                          className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:text-gray-700 dark:hover:text-gray-300"
-                        >
-                          GP {getSortIndicator('gamesPlayed')}
-                        </th>
-                        <th 
-                          scope="col"
-                          onClick={() => handleSort('wins')}
-                          className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:text-gray-700 dark:hover:text-gray-300"
-                        >
-                          W {getSortIndicator('wins')}
-                        </th>
-                        <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                          L
-                        </th>
-                        <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                          OT
-                        </th>
-                        <th 
-                          scope="col"
-                          onClick={() => handleSort('goalsAgainst')}
-                          className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:text-gray-700 dark:hover:text-gray-300"
-                        >
-                          GAA {getSortIndicator('goalsAgainst')}
-                        </th>
-                        <th 
-                          scope="col"
-                          onClick={() => handleSort('savePctg')}
-                          className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:text-gray-700 dark:hover:text-gray-300"
-                        >
-                          SV% {getSortIndicator('savePctg')}
-                        </th>
-                        <th 
-                          scope="col"
-                          onClick={() => handleSort('shutouts')}
-                          className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:text-gray-700 dark:hover:text-gray-300"
-                        >
-                          SO {getSortIndicator('shutouts')}
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
-                      {sortedRoster
-                        .filter(player => player.positionCode === 'G')
-                        .map(player => {
-                          const playerStats = getPlayerStatsById(player.id);
-                          const goalieData = playerStats?.goalieData;
-                          
-                          return (
-                            <tr 
-                              key={player.id} 
-                              className="hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
-                              onClick={() => openPlayerModal(player)}
-                            >
-                              <td className="px-3 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200 font-medium">
-                                {player.sweaterNumber || '-'}
-                              </td>
-                              <td className="px-3 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200">
-                                {player.firstName && player.lastName 
-                                  ? `${player.firstName.default} ${player.lastName.default}`
-                                  : 'N/A'}
-                              </td>
-                              <td className="px-3 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200">
-                                {goalieData?.gamesPlayed || 0}
-                              </td>
-                              <td className="px-3 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200">
-                                {goalieData?.wins || 0}
-                              </td>
-                              <td className="px-3 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200">
-                                {goalieData?.losses || 0}
-                              </td>
-                              <td className="px-3 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200">
-                                {goalieData?.otLosses || 0}
-                              </td>
-                              <td className="px-3 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200">
-                                {goalieData?.goalsAgainstAverage ? goalieData.goalsAgainstAverage.toFixed(2) : '0.00'}
-                              </td>
-                              <td className="px-3 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200">
-                                {goalieData?.savePctg ? goalieData.savePctg.toFixed(3) : '.000'}
-                              </td>
-                              <td className="px-3 py-4 whitespace-nowrap text-gray-800 dark:text-gray-200">
-                                {goalieData?.shutouts || 0}
-                              </td>
-                            </tr>
-                          );
-                      })}
-                    </tbody>
-                  </table>
+                  {/* Goalies Stats Cards */}
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200">Goalies</h3>
+                    <div className="flex gap-2 text-xs">
+                      <button 
+                        onClick={() => handleSort('wins')}
+                        className="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded hover:bg-green-200 dark:hover:bg-green-800"
+                      >
+                        Sort by Wins {getSortIndicator('wins')}
+                      </button>
+                      <button 
+                        onClick={() => handleSort('savePctg')}
+                        className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded hover:bg-blue-200 dark:hover:bg-blue-800"
+                      >
+                        Sort by SV% {getSortIndicator('savePctg')}
+                      </button>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {sortedRoster
+                      .filter(player => player.positionCode === 'G')
+                      .map(player => {
+                        const playerStats = getPlayerStatsById(player.id);
+                        const goalieData = playerStats?.goalieData;
+                        
+                        return (
+                          <div 
+                            key={player.id} 
+                            className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:shadow-lg transition-shadow cursor-pointer"
+                            onClick={() => openPlayerModal(player)}
+                          >
+                            {/* Goalie Header */}
+                            <div className="flex justify-between items-start mb-3">
+                              <div>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-lg font-bold text-gray-800 dark:text-gray-200">
+                                    #{player.sweaterNumber || '-'}
+                                  </span>
+                                  <span className="text-xs px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 rounded">
+                                    G
+                                  </span>
+                                </div>
+                                <h4 className="text-md font-semibold text-gray-800 dark:text-gray-200 mt-1">
+                                  {player.firstName && player.lastName 
+                                    ? `${player.firstName.default} ${player.lastName.default}`
+                                    : 'N/A'}
+                                </h4>
+                              </div>
+                              <div className="text-right text-xs text-gray-500 dark:text-gray-400">
+                                <div>GP: {goalieData?.gamesPlayed || 0}</div>
+                                <div>Record: {goalieData?.wins || 0}-{goalieData?.losses || 0}-{goalieData?.otLosses || 0}</div>
+                              </div>
+                            </div>
+
+                            {/* Performance Stats with StatBars */}
+                            <div className="space-y-3">
+                              <div>
+                                <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">Win Rate</div>
+                                <StatBar 
+                                  value={goalieData?.gamesPlayed ? (goalieData.wins / goalieData.gamesPlayed) * 100 : 0} 
+                                  maxValue={100} 
+                                  greenScale={true} 
+                                  showAsPercentage={true}
+                                />
+                              </div>
+                              
+                              <div>
+                                <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">Save Percentage</div>
+                                <StatBar 
+                                  value={(goalieData?.savePctg || 0) * 100} 
+                                  maxValue={100} 
+                                  greenScale={true} 
+                                  showAsPercentage={true}
+                                  customThresholds={{ excellent: 92.0, good: 90.0, poor: 88.0 }}
+                                />
+                              </div>
+                              
+                              <div className="flex justify-between items-center text-xs pt-2">
+                                <span className="text-gray-600 dark:text-gray-400">
+                                  Shutouts: 
+                                  <span className="ml-1 font-medium text-gray-800 dark:text-gray-200">
+                                    {goalieData?.shutouts || 0}
+                                  </span>
+                                </span>
+                                <span className="text-gray-600 dark:text-gray-400">
+                                  GAA: 
+                                  <span className={`ml-1 font-medium ${
+                                    (goalieData?.goalsAgainstAverage || 0) <= 2.5 ? 'text-green-600 dark:text-green-400' :
+                                    (goalieData?.goalsAgainstAverage || 0) <= 3.0 ? 'text-yellow-600 dark:text-yellow-400' :
+                                    'text-red-600 dark:text-red-400'
+                                  }`}>
+                                    {goalieData?.goalsAgainstAverage ? goalieData.goalsAgainstAverage.toFixed(2) : '0.00'}
+                                  </span>
+                                </span>
+                              </div>
+                              
+                              <div className="flex justify-center text-xs">
+                                <span className="text-gray-600 dark:text-gray-400">
+                                  SV%: 
+                                  <span className={`ml-1 font-medium ${
+                                    (goalieData?.savePctg || 0) * 100 >= 92.0 ? 'text-green-600 dark:text-green-400' :
+                                    (goalieData?.savePctg || 0) * 100 >= 90.0 ? 'text-green-600 dark:text-green-400' :
+                                    (goalieData?.savePctg || 0) * 100 >= 88.0 ? 'text-yellow-600 dark:text-yellow-400' :
+                                    'text-red-600 dark:text-red-400'
+                                  }`}>
+                                    {goalieData?.savePctg ? goalieData.savePctg.toFixed(3) : '.000'}
+                                  </span>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                    })}
+                  </div>
                 </>
               )}
             </div>
