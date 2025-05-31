@@ -18,12 +18,13 @@ export default function TeamsPage() {
   }, [selectedTeam]);
 
   return (
-    <main className="flex flex-col min-h-screen p-4 pt-8 md:p-8 max-w-7xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6 text-center text-gray-800 dark:text-gray-200">NHL Teams</h1>
-      
-      <div className="flex flex-col md:flex-row gap-6">
-        {/* Left sidebar with team list */}
-        <div className="w-full md:w-1/3 bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-6 md:mb-0">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-8 px-4 sm:px-6 lg:px-8">
+      <main className="container mx-auto max-w-7xl flex flex-col items-center">
+        <h1 className="text-4xl font-bold text-center text-gray-800 dark:text-gray-100 mb-8">NHL Teams</h1>
+        
+        <div className="w-full flex flex-col md:flex-row gap-6">
+          {/* Left sidebar with team list */}
+          <div className="w-full md:w-1/3 bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-6 md:mb-0">
           <TeamList 
             selectedTeam={selectedTeam} 
             onSelectTeam={setSelectedTeam} 
@@ -76,5 +77,6 @@ export default function TeamsPage() {
         </div>
       </div>
     </main>
+    </div>
   );
 }

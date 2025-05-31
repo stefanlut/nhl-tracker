@@ -11,6 +11,8 @@ const nextConfig = {
     ],
     minimumCacheTTL: 60,
   },
+  // Allow cross-origin requests in development from network IP
+  allowedDevOrigins: ['10.0.0.182'],
 };
 
 export default nextConfig;

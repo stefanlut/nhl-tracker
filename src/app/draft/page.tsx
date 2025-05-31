@@ -45,20 +45,23 @@ export default function DraftPage() {
 
   if (loading) {
     return (
-      <main className="flex flex-col min-h-screen p-4 pt-8 md:p-8 max-w-7xl mx-auto">
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          <span className="ml-3 text-gray-600 dark:text-gray-400">Loading draft rankings...</span>
-        </div>
-      </main>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-8 px-4 sm:px-6 lg:px-8">
+        <main className="container mx-auto max-w-7xl flex flex-col items-center">
+          <div className="flex items-center justify-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <span className="ml-3 text-gray-600 dark:text-gray-400">Loading draft rankings...</span>
+          </div>
+        </main>
+      </div>
     );
   }
 
   if (error) {
     return (
-      <main className="flex flex-col min-h-screen p-4 pt-8 md:p-8 max-w-7xl mx-auto">
-        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6">
-          <div className="flex items-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-8 px-4 sm:px-6 lg:px-8">
+        <main className="container mx-auto max-w-7xl flex flex-col items-center">
+          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6">
+            <div className="flex items-center">
             <div className="flex-shrink-0">
               <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
@@ -79,6 +82,7 @@ export default function DraftPage() {
           </div>
         </div>
       </main>
+      </div>
     );
   }
 
@@ -114,11 +118,12 @@ export default function DraftPage() {
   };
 
   return (
-    <main className="flex flex-col min-h-screen p-4 pt-8 md:p-8 max-w-7xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2 text-center text-gray-800 dark:text-gray-200">
-          {draftData.draftYear} NHL Draft Rankings
-        </h1>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-8 px-4 sm:px-6 lg:px-8">
+      <main className="container mx-auto max-w-7xl flex flex-col items-center">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2 text-center text-gray-800 dark:text-gray-200">
+            {draftData.draftYear} NHL Draft Rankings
+          </h1>
         <p className="text-center text-gray-600 dark:text-gray-400 mb-6">
           Central Scouting Rankings - {draftData.categories.find(cat => cat.consumerKey === selectedCategory)?.name || 'North American Skater'}
         </p>
@@ -266,5 +271,6 @@ export default function DraftPage() {
         </div>
       )}
     </main>
+    </div>
   );
 }
