@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState, useMemo } from 'react';
 import { REFRESH_INTERVAL_SECONDS, NO_GAMES_REFRESH_INTERVAL_SECONDS } from '@/constants';
+import { NHLScheduleResponse } from '@/types/nhl';
 import useSWR from 'swr';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -10,20 +11,29 @@ interface RefreshTimerProps {
 }
 
 export default function RefreshTimer({ type = 'daily' }: RefreshTimerProps) {
-    // Get data to determine if we should use reduced refresh
-    const { data, isLoading } = useSWR(`/api/games?type=${type}`, fetcher, {
-        refreshInterval: 0, // Don't auto-refresh this request, just get initial data
-        revalidateOnFocus: false,
-        revalidateOnReconnect: false
-    });
+    // Only fetch data for daily type to determine refresh interval
+    const shouldFetchData = type === 'daily';
+    
+    const { data, isLoading } = useSWR<NHLScheduleResponse>(
+        shouldFetchData ? `/api/games?type=${type}` : null, 
+        fetcher, 
+        {
+            refreshInterval: 0, // Don't auto-refresh this request, just get initial data
+            revalidateOnFocus: false,
+            revalidateOnReconnect: false
+        }
+    );
 
     // Determine appropriate refresh interval
     const refreshInterval = useMemo(() => {
+        // Weekly type always uses normal refresh interval
         if (type === 'weekly') return REFRESH_INTERVAL_SECONDS;
+        
+        // Daily type: check for games today when data is available
         if (!data) return REFRESH_INTERVAL_SECONDS; // Default to 30s while loading
         
         const today = new Date().toISOString().split('T')[0];
-        const todaysGameDay = data.gameWeek?.find((day: any) => day.date === today);
+        const todaysGameDay = data.gameWeek?.find((day) => day.date === today);
         const hasGamesToday = (todaysGameDay?.games.length || 0) > 0;
         
         return hasGamesToday ? REFRESH_INTERVAL_SECONDS : NO_GAMES_REFRESH_INTERVAL_SECONDS;
@@ -31,7 +41,7 @@ export default function RefreshTimer({ type = 'daily' }: RefreshTimerProps) {
 
     const [secondsLeft, setSecondsLeft] = useState(refreshInterval);
 
-    // Don't start timer until data is loaded for daily type
+    // Don't start timer until data is loaded for daily type, but weekly type can start immediately
     const shouldStartTimer = type === 'weekly' || !isLoading;
 
     useEffect(() => {
@@ -63,7 +73,7 @@ export default function RefreshTimer({ type = 'daily' }: RefreshTimerProps) {
     const isReducedRefresh = refreshInterval === NO_GAMES_REFRESH_INTERVAL_SECONDS;
     const refreshModeText = isReducedRefresh ? 'reduced refresh (no games today)' : 'normal refresh';
 
-    // Show loading state for daily type until data loads
+    // Show loading state only for daily type until data loads
     if (type === 'daily' && isLoading) {
         return (
             <div className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-2">

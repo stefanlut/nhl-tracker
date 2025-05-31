@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { DraftRankingsResponse } from '@/types/nhl';
 import DraftPlayerCard from '../components/DraftPlayerCard';
 import ErrorBoundary from '../components/ErrorBoundary';
@@ -14,11 +14,7 @@ export default function DraftPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState<string>('north-american-skater');
 
-  useEffect(() => {
-    fetchDraftRankings();
-  }, [selectedCategory]);
-
-  const fetchDraftRankings = async () => {
+  const fetchDraftRankings = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -35,7 +31,11 @@ export default function DraftPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedCategory]);
+
+  useEffect(() => {
+    fetchDraftRankings();
+  }, [fetchDraftRankings]);
 
   const handleCategoryChange = (categoryKey: string) => {
     setSelectedCategory(categoryKey);

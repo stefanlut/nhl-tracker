@@ -56,7 +56,7 @@ export default function GamesList({ type = 'daily' }: GamesListProps) {
       const hasGamesToday = (todaysGameDay?.games.length || 0) > 0;
       console.log(`🔄 Refresh mode: ${hasGamesToday ? 'Normal (30s)' : 'Reduced (6h)'} - Games today: ${hasGamesToday}`);
     }
-  }, [shouldUseReducedRefresh, finalData, type]);
+  }, [finalData, type]);
 
   if (error) {
     return (
