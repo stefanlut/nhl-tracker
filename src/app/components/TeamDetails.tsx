@@ -582,7 +582,10 @@ export default function TeamDetails({ teamCode, view }: TeamDetailsProps) {
                 <>
                   {/* Skaters Stats Cards */}
                   <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200">Skaters</h3>
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200">Skaters</h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 md:hidden">Swipe to see more →</p>
+                    </div>
                     <div className="flex gap-2 text-xs">
                       <button 
                         onClick={() => handleSort('points')}
@@ -598,8 +601,9 @@ export default function TeamDetails({ teamCode, view }: TeamDetailsProps) {
                       </button>
                     </div>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-                    {sortedRoster
+                  <div className="relative mb-8">
+                    <div className="md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-4 flex md:block overflow-x-auto gap-4 pb-4 md:pb-0 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
+                      {sortedRoster
                       .filter(player => player.positionCode !== 'G')
                       .map(player => {
                         const playerStats = getPlayerStatsById(player.id);
@@ -619,7 +623,7 @@ export default function TeamDetails({ teamCode, view }: TeamDetailsProps) {
                         return (
                           <div 
                             key={player.id} 
-                            className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:shadow-lg transition-shadow cursor-pointer"
+                            className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:shadow-lg transition-shadow cursor-pointer w-72 md:w-auto flex-shrink-0"
                             onClick={() => openPlayerModal(player)}
                           >
                             {/* Player Header */}
@@ -709,11 +713,17 @@ export default function TeamDetails({ teamCode, view }: TeamDetailsProps) {
                           </div>
                         );
                     })}
+                    </div>
+                    {/* Mobile scroll indicator */}
+                    <div className="md:hidden absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white dark:from-gray-900 to-transparent pointer-events-none"></div>
                   </div>
                   
                   {/* Goalies Stats Cards */}
                   <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200">Goalies</h3>
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200">Goalies</h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 md:hidden">Swipe to see more →</p>
+                    </div>
                     <div className="flex gap-2 text-xs">
                       <button 
                         onClick={() => handleSort('wins')}
@@ -729,8 +739,9 @@ export default function TeamDetails({ teamCode, view }: TeamDetailsProps) {
                       </button>
                     </div>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {sortedRoster
+                  <div className="relative">
+                    <div className="md:grid md:grid-cols-2 md:gap-4 flex md:block overflow-x-auto gap-4 pb-4 md:pb-0 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
+                      {sortedRoster
                       .filter(player => player.positionCode === 'G')
                       .map(player => {
                         const playerStats = getPlayerStatsById(player.id);
@@ -739,7 +750,7 @@ export default function TeamDetails({ teamCode, view }: TeamDetailsProps) {
                         return (
                           <div 
                             key={player.id} 
-                            className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:shadow-lg transition-shadow cursor-pointer"
+                            className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:shadow-lg transition-shadow cursor-pointer w-72 md:w-auto flex-shrink-0"
                             onClick={() => openPlayerModal(player)}
                           >
                             {/* Goalie Header */}
@@ -824,6 +835,9 @@ export default function TeamDetails({ teamCode, view }: TeamDetailsProps) {
                           </div>
                         );
                     })}
+                    </div>
+                    {/* Mobile scroll indicator */}
+                    <div className="md:hidden absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white dark:from-gray-900 to-transparent pointer-events-none"></div>
                   </div>
                 </>
               )}
