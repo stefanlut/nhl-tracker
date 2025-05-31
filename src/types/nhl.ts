@@ -154,3 +154,36 @@ export interface NHLPlayerStats {
     skaterData?: SkaterStats;
     goalieData?: GoalieStats;
 }
+
+// NHL Draft Rankings Types
+export interface DraftCategory {
+    id: number;
+    name: string;
+    consumerKey: string;
+}
+
+export interface DraftRanking {
+    lastName: string;
+    firstName: string;
+    positionCode: string;
+    shootsCatches: string;
+    heightInInches: number;
+    weightInPounds: number;
+    lastAmateurClub: string;
+    lastAmateurLeague: string;
+    birthDate: string;
+    birthCity: string;
+    birthStateProvince?: string;
+    birthCountry: string;
+    midtermRank?: number;
+    finalRank: number;
+}
+
+export interface DraftRankingsResponse {
+    draftYear: number;
+    categoryId: number;
+    categoryKey: string;
+    draftYears: number[];
+    categories: DraftCategory[];
+    rankings: DraftRanking[];
+}

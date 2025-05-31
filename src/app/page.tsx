@@ -26,7 +26,7 @@ export default function Home() {
             </Link>
           </div>
           <Suspense fallback={null}>
-            <RefreshTimer />
+            <RefreshTimer type="daily" />
           </Suspense>
         </div>
         <GamesList type="daily" />

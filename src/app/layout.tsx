@@ -45,6 +45,9 @@ export default function RootLayout({
                   <Link href="/teams" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">
                     Teams
                   </Link>
+                  <Link href="/draft" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">
+                    Draft
+                  </Link>
                 </div>
               </div>
             </div>

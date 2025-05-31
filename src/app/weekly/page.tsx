@@ -26,7 +26,7 @@ export default function WeeklySchedule() {
             </Link>
           </div>
           <Suspense fallback={null}>
-            <RefreshTimer />
+            <RefreshTimer type="weekly" />
           </Suspense>
         </div>
         <GamesList type="weekly" />

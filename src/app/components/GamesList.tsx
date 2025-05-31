@@ -3,7 +3,8 @@
 import { NHLScheduleResponse } from '@/types/nhl';
 import useSWR from 'swr';
 import GameCard from './GameCard';
-import { REFRESH_INTERVAL_SECONDS } from '@/constants';
+import { REFRESH_INTERVAL_SECONDS, NO_GAMES_REFRESH_INTERVAL_SECONDS } from '@/constants';
+import { useMemo } from 'react';
 
 const fetcher = (url: string) => fetch(url).then(r => r.json());
 
@@ -21,6 +22,41 @@ export default function GamesList({ type = 'daily' }: GamesListProps) {
       revalidateOnReconnect: true
     }
   );
+
+  // For daily view, dynamically adjust refresh interval based on game availability
+  const shouldUseReducedRefresh = useMemo(() => {
+    if (type === 'weekly' || !data) return false;
+    
+    const today = new Date().toISOString().split('T')[0];
+    const todaysGameDay = data.gameWeek.find(day => day.date === today);
+    const hasGamesToday = (todaysGameDay?.games.length || 0) > 0;
+    
+    return !hasGamesToday;
+  }, [data, type]);
+
+  // Create a second SWR instance with reduced refresh when no games today
+  const { data: dataReduced } = useSWR<NHLScheduleResponse>(
+    shouldUseReducedRefresh ? `/api/games?type=${type}&reduced=true` : null,
+    fetcher,
+    {
+      refreshInterval: NO_GAMES_REFRESH_INTERVAL_SECONDS * 1000,
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true
+    }
+  );
+
+  // Use reduced refresh data when available, otherwise use normal data
+  const finalData = (shouldUseReducedRefresh && dataReduced) ? dataReduced : data;
+  
+  // Log refresh mode for debugging
+  useMemo(() => {
+    if (type === 'daily' && finalData) {
+      const today = new Date().toISOString().split('T')[0];
+      const todaysGameDay = finalData.gameWeek.find(day => day.date === today);
+      const hasGamesToday = (todaysGameDay?.games.length || 0) > 0;
+      console.log(`🔄 Refresh mode: ${hasGamesToday ? 'Normal (30s)' : 'Reduced (6h)'} - Games today: ${hasGamesToday}`);
+    }
+  }, [shouldUseReducedRefresh, finalData, type]);
 
   if (error) {
     return (
@@ -81,7 +117,12 @@ export default function GamesList({ type = 'daily' }: GamesListProps) {
     );
   }
 
-  const todaysGames = data.gameWeek[0]?.games || [];
+  // Get today's date in YYYY-MM-DD format
+  const today = new Date().toISOString().split('T')[0];
+  
+  // Find today's games in the response
+  const todaysGameDay = data.gameWeek.find(day => day.date === today);
+  const todaysGames = todaysGameDay?.games || [];
 
   return (
     <>
