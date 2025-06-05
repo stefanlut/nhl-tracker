@@ -2,6 +2,7 @@
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { REFRESH_INTERVAL_SECONDS, NO_GAMES_REFRESH_INTERVAL_SECONDS } from '@/constants';
 import { NHLScheduleResponse } from '@/types/nhl';
+import { getTodayLocal } from '@/app/utils/dates';
 import useSWR from 'swr';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -32,7 +33,7 @@ export default function RefreshTimer({ type = 'daily' }: RefreshTimerProps) {
         // Daily type: check for games today when data is available
         if (!data) return null; // Don't determine interval until we have data
         
-        const today = new Date().toISOString().split('T')[0];
+        const today = getTodayLocal();
         const todaysGameDay = data.gameWeek?.find((day) => day.date === today);
         const hasGamesToday = (todaysGameDay?.games.length || 0) > 0;
         
