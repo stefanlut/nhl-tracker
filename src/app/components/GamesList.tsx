@@ -5,6 +5,7 @@ import useSWR from 'swr';
 import GameCard from './GameCard';
 import { REFRESH_INTERVAL_SECONDS, NO_GAMES_REFRESH_INTERVAL_SECONDS } from '@/constants';
 import { useMemo } from 'react';
+import { getTodayLocal } from '@/app/utils/dates';
 
 const fetcher = (url: string) => fetch(url).then(r => r.json());
 
@@ -27,8 +28,8 @@ export default function GamesList({ type = 'daily' }: GamesListProps) {
   const shouldUseReducedRefresh = useMemo(() => {
     if (type === 'weekly' || !data) return false;
     
-    const today = new Date().toISOString().split('T')[0];
-    const todaysGameDay = data.gameWeek.find(day => day.date === today);
+    const todayLocal = getTodayLocal();
+    const todaysGameDay = data.gameWeek.find(day => day.date === todayLocal);
     const hasGamesToday = (todaysGameDay?.games.length || 0) > 0;
     
     return !hasGamesToday;
@@ -51,10 +52,10 @@ export default function GamesList({ type = 'daily' }: GamesListProps) {
   // Log refresh mode for debugging
   useMemo(() => {
     if (type === 'daily' && finalData) {
-      const today = new Date().toISOString().split('T')[0];
-      const todaysGameDay = finalData.gameWeek.find(day => day.date === today);
+      const todayLocal = getTodayLocal();
+      const todaysGameDay = finalData.gameWeek.find(day => day.date === todayLocal);
       const hasGamesToday = (todaysGameDay?.games.length || 0) > 0;
-      console.log(`🔄 Refresh mode: ${hasGamesToday ? 'Normal (30s)' : 'Reduced (6h)'} - Games today: ${hasGamesToday}`);
+      console.log(`🔄 Refresh mode: ${hasGamesToday ? 'Normal (30s)' : 'Reduced (6h)'} - Games today: ${hasGamesToday} - Date: ${todayLocal}`);
     }
   }, [finalData, type]);
 
@@ -117,11 +118,11 @@ export default function GamesList({ type = 'daily' }: GamesListProps) {
     );
   }
 
-  // Get today's date in YYYY-MM-DD format
-  const today = new Date().toISOString().split('T')[0];
+  // Get today's date in YYYY-MM-DD format using local time
+  const todayLocal = getTodayLocal();
   
   // Find today's games in the response
-  const todaysGameDay = data.gameWeek.find(day => day.date === today);
+  const todaysGameDay = data.gameWeek.find(day => day.date === todayLocal);
   const todaysGames = todaysGameDay?.games || [];
 
   return (
