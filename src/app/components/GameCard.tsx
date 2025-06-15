@@ -1,5 +1,6 @@
 import { NHLGame } from '@/types/nhl';
 import Image from 'next/image';
+import LiveBoxscoreStats from './LiveBoxscoreStats';
 
 interface GameCardProps {
     game: NHLGame;
@@ -195,6 +196,15 @@ export default function GameCard({ game }: GameCardProps) {
                     </div>
                 </div>
             </div>
+            
+            {/* Live Boxscore Stats for ongoing games */}
+            {isLive && (
+                <LiveBoxscoreStats 
+                    gameId={game.id}
+                    awayTeamAbbrev={getTeamAbbr(game.awayTeam.id)}
+                    homeTeamAbbrev={getTeamAbbr(game.homeTeam.id)}
+                />
+            )}
         </div>
     );
 }
