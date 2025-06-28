@@ -3,8 +3,8 @@ import Link from 'next/link';
 
 export default function DraftPage() {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pt-8">
+    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen">
+      <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pt-8 pb-12">
         {/* Navigation */}
         <div className="flex items-center gap-4 mb-6">
           <Link 

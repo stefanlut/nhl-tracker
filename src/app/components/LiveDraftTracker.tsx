@@ -135,51 +135,42 @@ export default function LiveDraftTracker() {
 
     if (draftError) {
         return (
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-8 px-4 sm:px-6 lg:px-8">
-                <main className="container mx-auto max-w-6xl">
-                    <div className="text-center py-12">
-                        <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-                            NHL Draft Tracker
-                        </h1>
-                        <div className="text-red-600 dark:text-red-400">
-                            <p className="mb-4">Failed to load draft data</p>
-                            <button 
-                                onClick={() => mutate()}
-                                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                            >
-                                Retry
-                            </button>
-                        </div>
-                    </div>
-                </main>
+            <div className="text-center py-12">
+                <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+                    NHL Draft Tracker
+                </h1>
+                <div className="text-red-600 dark:text-red-400">
+                    <p className="mb-4">Failed to load draft data</p>
+                    <button 
+                        onClick={() => mutate()}
+                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    >
+                        Retry
+                    </button>
+                </div>
             </div>
         );
     }
 
     if (isLoading) {
         return (
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-8 px-4 sm:px-6 lg:px-8">
-                <main className="container mx-auto max-w-6xl">
-                    <div className="text-center py-12">
-                        <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-8">
-                            NHL Draft Tracker
-                        </h1>
-                        <div className="flex items-center justify-center gap-3 text-gray-500 dark:text-gray-400">
-                            <svg className="w-6 h-6 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                            </svg>
-                            <span>Loading draft data...</span>
-                        </div>
-                    </div>
-                </main>
+            <div className="text-center py-12">
+                <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-8">
+                    NHL Draft Tracker
+                </h1>
+                <div className="flex items-center justify-center gap-3 text-gray-500 dark:text-gray-400">
+                    <svg className="w-6 h-6 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    <span>Loading draft data...</span>
+                </div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-8 px-4 sm:px-6 lg:px-8">
-            <main className="container mx-auto max-w-6xl">
-                <div className="flex flex-col items-center gap-4 mb-8">
+        <div>
+            <div className="flex flex-col items-center gap-4 mb-8">
                     <h1 className="text-4xl font-bold text-center text-gray-800 dark:text-gray-100">
                         NHL Draft Tracker 2025
                     </h1>
@@ -260,12 +251,12 @@ export default function LiveDraftTracker() {
                 </div>
 
                 {/* Draft Picks Display */}
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {selectedView === 'recent' && recentPicks.slice(0, 12).map(pick => 
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 pb-8">
+                    {selectedView === 'recent' && recentPicks.map(pick => 
                         renderPickCard(pick, true)
                     )}
                     
-                    {selectedView === 'upcoming' && upcomingPicks.slice(0, 12).map(pick => 
+                    {selectedView === 'upcoming' && upcomingPicks.map(pick => 
                         renderPickCard(pick, false)
                     )}
                     
@@ -295,7 +286,6 @@ export default function LiveDraftTracker() {
                         <p>No {selectedView} picks available</p>
                     </div>
                 )}
-            </main>
         </div>
     );
 }
