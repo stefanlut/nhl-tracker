@@ -334,3 +334,84 @@ export interface BoxscoreResponse {
     };
     summary?: Record<string, unknown>;
 }
+
+// Live Draft Tracker Types
+export interface DraftPick {
+    pickInRound: number;
+    overallPick: number;
+    teamId: number;
+    teamAbbrev: string;
+    teamFullName: {
+        default: string;
+        fr?: string;
+    };
+    teamCommonName: {
+        default: string;
+        fr?: string;
+    };
+    teamPlaceNameWithPreposition: {
+        default: string;
+        fr?: string;
+    };
+    teamLogoLight: string;
+    teamLogoDark: string;
+    state: 'confirmed' | 'onTheClock' | 'open';
+    lastName?: {
+        default: string;
+        fr?: string;
+    };
+    firstName?: {
+        default: string;
+        fr?: string;
+    };
+    positionCode?: string;
+    // Additional prospect details that might be available
+    prospect?: {
+        id?: number;
+        shoots?: string;
+        height?: string;
+        weight?: number;
+        birthDate?: string;
+        birthCity?: {
+            default: string;
+        };
+        birthCountry?: string;
+        birthStateProvince?: {
+            default: string;
+        };
+        headshot?: string;
+        amateurClub?: {
+            default: string;
+        };
+        amateurLeague?: {
+            default: string;
+        };
+    };
+    timeOnClock?: string;
+    pickTime?: string;
+    tradedFrom?: {
+        teamId: number;
+        teamAbbrev: string;
+        teamFullName: {
+            default: string;
+        };
+    };
+}
+
+export interface LiveDraftResponse {
+    currentDraftDate: string;
+    broadcastStartTimeUTC: string;
+    tvBroadcasts: Array<{
+        id: number;
+        market: string;
+        countryCode: string;
+        network: string;
+        sequenceNumber: number;
+    }>;
+    logoUrl: string;
+    logoFrUrl: string;
+    uiAccentColor: string;
+    round: number;
+    state: string;
+    picks: DraftPick[];
+}

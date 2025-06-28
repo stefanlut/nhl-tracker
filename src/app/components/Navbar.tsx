@@ -29,6 +29,9 @@ export default function Navbar() {
             <Link href="/draft" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">
               Draft
             </Link>
+            <Link href="/draft-live" className="text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 px-3 py-2 rounded-md text-sm font-medium">
+              🔴 Live Draft
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -80,6 +83,13 @@ export default function Navbar() {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Draft
+              </Link>
+              <Link 
+                href="/draft-live" 
+                className="block text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 px-3 py-2 rounded-md text-base font-medium"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                🔴 Live Draft
               </Link>
             </div>
           </div>

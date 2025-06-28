@@ -11,7 +11,7 @@ export default function Home() {
           <h1 className="text-4xl font-bold text-center text-gray-800 dark:text-gray-100">
             NHL Games Today
           </h1>
-          <div className="flex space-x-4">
+          <div className="flex flex-wrap justify-center gap-4">
             <Link 
               href="/weekly"
               className="text-blue-600 dark:text-blue-400 hover:underline"
@@ -23,6 +23,18 @@ export default function Home() {
               className="text-blue-600 dark:text-blue-400 hover:underline"
             >
               View Teams
+            </Link>
+            <Link 
+              href="/draft"
+              className="text-blue-600 dark:text-blue-400 hover:underline"
+            >
+              Draft Rankings
+            </Link>
+            <Link 
+              href="/draft-live"
+              className="text-orange-600 dark:text-orange-400 hover:underline font-medium"
+            >
+              🔴 Live Draft Tracker
             </Link>
           </div>
           <Suspense fallback={null}>
