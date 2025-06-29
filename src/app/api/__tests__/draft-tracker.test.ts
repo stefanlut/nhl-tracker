@@ -1,55 +1,32 @@
-import { NextRequest } from 'next/server';
-
 // Mock fetch
 global.fetch = jest.fn();
-
-// Mock Next.js APIs that aren't available in test environment
-(global as any).Response = class MockResponse {
-  constructor(public body: any, public init: any = {}) {}
-  
-  async json() {
-    return JSON.parse(this.body);
-  }
-  
-  get status() {
-    return this.init.status || 200;
-  }
-  
-  get ok() {
-    return this.status >= 200 && this.status < 300;
-  }
-  
-  get headers() {
-    return new Map(Object.entries(this.init.headers || {}));
-  }
-  
-  static json(data: any, init?: any) {
-    return new MockResponse(JSON.stringify(data), init);
-  }
-  
-  static error() {
-    return new MockResponse('', { status: 500 });
-  }
-  
-  static redirect(url: string, status = 302) {
-    return new MockResponse('', { status, headers: { Location: url } });
-  }
-};
-
-(global as any).Request = class MockRequest {
-  constructor(public url: string, public options: any = {}) {}
-};
 
 // Mock NextResponse
 jest.mock('next/server', () => ({
   NextRequest: jest.fn(),
   NextResponse: {
-    json: (data: any, init?: any) => new (global as any).Response(JSON.stringify(data), init)
+    json: jest.fn((data: unknown, init?: ResponseInit) => ({
+      json: () => Promise.resolve(data),
+      status: init?.status || 200,
+      ok: (init?.status || 200) >= 200 && (init?.status || 200) < 300,
+      headers: new Map(Object.entries(init?.headers || {}))
+    })),
+    error: jest.fn(() => ({
+      json: () => Promise.resolve({ error: 'Internal Server Error' }),
+      status: 500,
+      ok: false,
+      headers: new Map()
+    })),
+    redirect: jest.fn((url: string, status = 302) => ({
+      status,
+      headers: new Map([['Location', url]]),
+      ok: false
+    }))
   }
 }));
 
 // Import the route handler after mocking
-const { GET } = require('../draft-tracker/route');
+import { GET } from '../draft-tracker/route';
 
 describe('/api/draft-tracker', () => {
   beforeEach(() => {

@@ -24,7 +24,8 @@ jest.mock('swr', () => ({
   default: jest.fn(),
 }));
 
-const mockSWR = require('swr').default as jest.Mock;
+import useSWR from 'swr';
+const mockUseSWR = useSWR as jest.MockedFunction<typeof useSWR>;
 
 // Mock the next/image component
 jest.mock('next/image', () => ({
@@ -132,12 +133,12 @@ const TestWrapper = ({ children, data, error }: {
 
 describe.skip('LiveDraftTracker', () => {
   beforeEach(() => {
-    mockSWR.mockClear();
+    mockUseSWR.mockClear();
   });
 
   it('renders loading state initially', () => {
     // Mock loading state
-    mockSWR.mockReturnValue({
+    mockUseSWR.mockReturnValue({
       data: undefined,
       error: undefined,
       mutate: jest.fn()
@@ -242,8 +243,6 @@ describe.skip('LiveDraftTracker', () => {
   });
 
   it('handles refresh button click', async () => {
-    const mockMutate = jest.fn();
-    
     render(
       <TestWrapper data={mockDraftData}>
         <LiveDraftTracker />

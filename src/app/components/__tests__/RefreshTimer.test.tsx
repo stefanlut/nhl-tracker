@@ -1,4 +1,4 @@
-import { render, screen, act, waitFor } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import RefreshTimer from '../RefreshTimer';
 
 // Mock the timer
@@ -75,7 +75,7 @@ describe('RefreshTimer', () => {
   it('formats time correctly when less than 60 seconds', async () => {
     // Mock Date to control the refresh calculation
     const mockDate = new Date('2024-01-01T12:00:30Z'); // 30 seconds past the minute
-    const dateSpy = jest.spyOn(global, 'Date').mockImplementation(() => mockDate as any);
+    const dateSpy = jest.spyOn(global, 'Date').mockImplementation(() => mockDate as Date);
     
     render(<RefreshTimer type="daily" />);
     
@@ -88,7 +88,7 @@ describe('RefreshTimer', () => {
   it('formats time correctly when more than 60 seconds', () => {
     // Mock Date to control the refresh calculation
     const mockDate = new Date('2024-01-01T12:00:00Z'); // Exactly on the minute
-    const dateSpy = jest.spyOn(global, 'Date').mockImplementation(() => mockDate as any);
+    const dateSpy = jest.spyOn(global, 'Date').mockImplementation(() => mockDate as Date);
     
     render(<RefreshTimer type="daily" />);
     

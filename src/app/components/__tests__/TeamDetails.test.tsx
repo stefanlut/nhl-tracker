@@ -74,9 +74,8 @@ const mockPlayerStats = [
 ];
 
 // Helper component to wrap with SWR provider for testing
-const TestWrapper = ({ children, teamCode = 'EDM' }: { 
+const TestWrapper = ({ children }: { 
   children: React.ReactNode; 
-  teamCode?: string;
 }) => {
   const mockFetcher = (url: string) => {
     if (url.includes('/stats')) {
